@@ -1,38 +1,34 @@
-## makeCacheMatrix: This function creates a special "matrix" object that can cache its inverse.
-makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL  # Initialize inverse as NULL
-  
-  # Set the matrix and reset the cached inverse
-  set <- function(y) {
-    x <<- y
-    inv <<- NULL
+# The caMatrix function creates a special matrix that can cache its inverse
+CaMatrix<- function(x=matrix()){
+  inv<- NULL
+  set<-function(y){
+    x<<-y
+    inv<<-NULL
+    }
+  #To get the matrix
+  get<-function() x
+  #To set the inverse
+  setinverse<-function(inverse)inv<<-inverse
+
+  #To get the inverse
+  getinverse<-function() inv
+
+  #To return the list of functions
+  list(set=set, get=get,
+       setinverse=setinverse,
+       getinverse=getinverse)
   }
-  
-  # Get the matrix
-  get <- function() x
-  
-  # Set the inverse
-  setInverse <- function(inverse) inv <<- inverse
-  
-  # Get the inverse
-  getInverse <- function() inv
-  
-  # Return list of functions
-  list(set = set, get = get,
-       setInverse = setInverse,
-       getInverse = getInverse)
-}
-## cacheSolve: This function computes the inverse of the special "matrix" returned by makeCacheMatrix.
-## If the inverse has already been calculated and cached, it retrieves the cached inverse instead of recomputing.
-cacheSolve <- function(x, ...) {
-  inv <- x$getInverse()  # Check if inverse is already cached
-  if (!is.null(inv)) {
-    message("getting cached data")
+#The Cacompute function computes the inverse of the matrix previously created returned by Camatrix 
+# it also retrieves the cache inverse if it has already been calculated
+
+Cacompute<-function(x,...){
+  inv<-x$getinverse() #this checks if inverse is already cached
+  if(!is.null(inv)){
     return(inv)
-  }
-  
-  mat <- x$get()  # Retrieve the matrix
-  inv <- solve(mat, ...)  # Compute the inverse
-  x$setInverse(inv)  # Cache the inverse
+    }
+  matrix2<-x$get() #to retrieve the matrix
+  inv<-solve(matrix2,...) #to compute the inverse
+  x$setinverse(inv) #to cache the inverse
   inv
-}
+  }
+
